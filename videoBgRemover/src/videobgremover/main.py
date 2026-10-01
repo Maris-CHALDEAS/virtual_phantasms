@@ -44,21 +44,38 @@ def frame_bg_remove(input_dir, output_dir):
 
     print("INFO: Frames background removed")
 
-def video_from_frames(input_dir, output_dir):
+def video_from_frames(input_dir, output_dir, fps=60):
 
-    images = [img for img in os.listdir(input_dir) if img.endswith((".png", ".jpg", "jpeg"))]
+    images = [img for img in os.listdir(input_dir) ]
 
 
-    images.sort(key=lambda f: int(re.sub('\D', '', f)))
+    images.sort(key=lambda f: int(re.sub(r'\D', '', f)))
+
+    print(len(images))
+
+    first_image_path = os.path.join(input_dir, images[0])
+
+    print(first_image_path)
+    frame = cv2.imread(first_image_path)
+
+    height, width, _ = frame.shape
+
+    size = (width, height)
+
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    video = cv2.VideoWriter(output_dir, fourcc, fps, size)
+
     for image in images:
-        print(image)
+        image_path = os.path.join(input_dir, image)
+        video.write(cv2.imread(image_path))
+        print("INFO: Vidoe is being written")
 
-    return
-
-
+    video.release()
+    print("INFO: Vidoe have been written")
 
 if __name__ == "__main__":
     # remove_background("../input/input.jpg", "../output.png")
     # frames_from_video("../input/miku.mp4", "../output/miku")
     # frame_bg_remove("../output/miku/", "../output/miku_bg")
-    video_from_frames("../output/miku/", "../output/miku_bg")
+    # video_from_frames("../output/miku_bg", "../output_v/miku")
+    video_from_frames("../output/miku_bg", "../output_v/miku/miku.mp4", 20)

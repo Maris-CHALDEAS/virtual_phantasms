@@ -8,3 +8,16 @@ wheels/
 
 # Virtual environments
 .venv
+
+input
+output
+input_v
+output_v
+
+.venv
+
+env
+.env
+.secrets
+.env-txt
+
